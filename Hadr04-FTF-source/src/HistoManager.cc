@@ -61,8 +61,8 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);     //enable inactivation of histograms
   
   // Define histograms start values
-  const G4int kMaxHisto = 8;
-  const G4String id[] = {"0","1","2","3","4","5","6","7"};
+  const G4int kMaxHisto = 9;
+  const G4String id[] = {"0","1","2","3","4","5","6","7","8"};
   const G4String title[] = 
                 { "dummy",                                           //0
                   "incident neutron: nb of collisions above 1 eV",   //1
@@ -71,7 +71,8 @@ void HistoManager::Book()
                   "incident neutron: nb of collisions below 1 eV",   //4
                   "incident neutron: total track length below 1*eV", //5
                   "incident neutron: time of flight below 1 eV",     //6
-                  "incident neutron: energy distribution below 1*eV" //7
+                  "incident neutron: energy distribution below 1*eV",//7
+                  "time of nCapture"                                 //8   
                  };  
 
   // Default values (to be reset via /analysis/h1/set command)               

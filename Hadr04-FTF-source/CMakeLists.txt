@@ -47,6 +47,7 @@ set(Hadr04_SCRIPTS
     hadr04.in 
     run01.mac 
     vis.mac
+    water.mac
   )
 
 foreach(_script ${Hadr04_SCRIPTS})

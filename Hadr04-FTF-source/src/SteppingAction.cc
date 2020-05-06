@@ -69,6 +69,13 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     fTrackingAction->UpdateTrackInfo(ekin,trackl,time);
     G4AnalysisManager::Instance()->FillH1(7,ekin);
   }    
+
+  // Times of nCapture
+
+  if(!process_name.compare("nCapture")){
+    G4double t_finish=step->GetPostStepPoint()->GetGlobalTime();
+    G4AnalysisManager::Instance()->FillH1(8,t_finish);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

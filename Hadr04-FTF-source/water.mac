@@ -2,7 +2,7 @@
 # Macro file for "Hadr04.cc"
 # (can be run in batch, without graphic)
 #
-# neutron 15 MeV; all processes
+# neutron 100 MeV; all processes
 #
 /control/verbose 2
 /run/verbose 2
@@ -10,7 +10,7 @@
 /testhadr/det/setMat G4_WATER
 /testhadr/det/setSize 20 m
 #
-/testhadr/phys/thermalScattering true
+#/testhadr/phys/thermalScattering true
 #
 /run/initialize
 #
@@ -18,16 +18,16 @@
 #
 /particle/createAllIsomer
 /gun/particle neutron
-/gun/energy 15 MeV
+/gun/energy 100 MeV
 #
 /analysis/setFileName Water_on
 /analysis/h1/set 1  100  0. 200. none	#nb colli >1eV
 /analysis/h1/set 2  100  0. 5. m	#track len >1eV
-/analysis/h1/set 3  100  0. 50. us	#time of flight >1eV
+/analysis/h1/set 3  100  0. 1. ns	#time of flight >1eV
 /analysis/h1/set 4  100  0. 10000. none	#nb colli <1eV
 /analysis/h1/set 5  100  0. 100. m	#track len <1eV
-/analysis/h1/set 6  100  0. 100. ms	#time of flight <1eV
-/analysis/h1/set 7  100  0. 500. ueV	#energy dist <1eV
+/analysis/h1/set 6  100  0. 20. ns	#time of flight <1eV
+/analysis/h1/set 7  100  0. 500. keV	#energy dist <1eV
 #
 /run/printProgress 200
 #

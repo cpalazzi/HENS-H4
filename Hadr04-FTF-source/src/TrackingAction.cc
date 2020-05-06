@@ -90,7 +90,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  analysisManager->FillH1(3,fTime1); 
  analysisManager->FillH1(4,fNbStep2);
  analysisManager->FillH1(5,fTrackLen2);
- analysisManager->FillH1(6,fTime2);     
+ analysisManager->FillH1(6,fTime2);
+ //7 is filled in SteppingAction.cc
+ analysisManager->FillH1(8, nCaptureTime);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
