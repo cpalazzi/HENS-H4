@@ -55,7 +55,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   G4ParticleDefinition* particle
            = G4ParticleTable::GetParticleTable()->FindParticle("neutron");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   fParticleGun->SetParticleEnergy(2*MeV);
   fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,0.*cm));
 
@@ -72,7 +72,18 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of event
+  
+  G4double x0 = 0.*m;
+  G4double y0 = 0.*m;
+  G4double z0 = 0.*m;
+
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0, y0, z0));
+
+  fParticleGun->GeneratePrimaryVertex(anEvent);
+
+  // The following is the original primary action with neutrons fired in
+  // a spherical distribution
+  /*//this function is called at the begining of event
   //
   //distribution uniform in solid angle
   //
@@ -84,7 +95,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,uz));
   
-  fParticleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);*/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

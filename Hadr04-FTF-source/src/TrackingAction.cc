@@ -58,7 +58,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::UpdateTrackInfo(G4double ekin,G4double trackl,
-                                     G4double time)
+                                     G4double time/*, G4double t_finish*/)
 {
   const G4double thermal = 1*eV;
   if (ekin > thermal) {
@@ -92,7 +92,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  analysisManager->FillH1(5,fTrackLen2);
  analysisManager->FillH1(6,fTime2);
  //7 is filled in SteppingAction.cc
- analysisManager->FillH1(8, nCaptureTime);     
+ //8 is filled in SteppingAction.cc     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

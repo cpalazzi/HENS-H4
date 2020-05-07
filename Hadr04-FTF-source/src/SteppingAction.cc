@@ -71,9 +71,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   }    
 
   // Times of nCapture
+  G4String process_name=aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+
 
   if(!process_name.compare("nCapture")){
-    G4double t_finish=step->GetPostStepPoint()->GetGlobalTime();
+    G4double t_finish=aStep->GetPostStepPoint()->GetGlobalTime();
+    //fTrackingAction->UpdateTrackInfo(t_finish);
     G4AnalysisManager::Instance()->FillH1(8,t_finish);
   }
 }
