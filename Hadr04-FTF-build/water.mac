@@ -8,7 +8,7 @@
 /run/verbose 2
 #
 /testhadr/det/setMat G4_WATER
-/testhadr/det/setSize 20 m
+/testhadr/det/setSize 200 m
 #
 #/testhadr/phys/thermalScattering true
 #
