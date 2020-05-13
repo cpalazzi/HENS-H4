@@ -18,9 +18,9 @@
 #
 /particle/createAllIsomer
 /gun/particle neutron
-/gun/energy 100 MeV
+/gun/energy 300 MeV
 #
-/analysis/setFileName waterout
+/analysis/setFileName water300out
 /analysis/h1/set 1  100  0. 200. none	#nb colli >1eV
 /analysis/h1/set 2  100  0. 5. m	#track len >1eV
 /analysis/h1/set 3  100  0. 1. ns	#time of flight >1eV

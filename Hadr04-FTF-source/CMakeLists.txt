@@ -48,6 +48,7 @@ set(Hadr04_SCRIPTS
     run01.mac 
     vis.mac
     water.mac
+    plotHisto.C
   )
 
 foreach(_script ${Hadr04_SCRIPTS})

@@ -20,7 +20,7 @@
 /gun/particle neutron
 /gun/energy 100 MeV
 #
-/analysis/setFileName Water_on
+/analysis/setFileName water100out
 /analysis/h1/set 1  100  0. 200. none	#nb colli >1eV
 /analysis/h1/set 2  100  0. 5. m	#track len >1eV
 /analysis/h1/set 3  100  0. 1. ns	#time of flight >1eV

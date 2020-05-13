@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "plotHisto.C": "cpp",
+        "plotHistoStack.C": "cpp",
+        "plotTimesnCaptureSlopes.C": "cpp"
+    }
+}
