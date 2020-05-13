@@ -78,7 +78,6 @@ text1000.DrawClone();
 TLegend *leg = new TLegend(0.68,0.7,0.99,0.94);
 leg->DrawClone("Same");
 TText *t = new TText(1.55,1050,Form("Entries = %d",entries));
-t->SetTextFont(1);
 t->Draw();
 
 

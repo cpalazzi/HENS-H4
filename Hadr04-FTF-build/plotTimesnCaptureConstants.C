@@ -1,4 +1,4 @@
-void plotTimesnCaptureSlopes(){
+void plotTimesnCaptureConstants(){
 
 // Open files
 TFile *f1 = TFile::Open("water100out.root");
@@ -34,45 +34,46 @@ TFitResultPtr fit900 = hist900->Fit("expo","SN");
 TH1D* hist1000 = (TH1D*)f10->Get("8");
 TFitResultPtr fit1000 = hist1000->Fit("expo","SN");
 
-// Get slope values
-double slope100 = fit100->Parameter(1);
-double slope200 = fit200->Parameter(1);
-double slope300 = fit300->Parameter(1);
-double slope400 = fit400->Parameter(1);
-double slope500 = fit500->Parameter(1);
-double slope600 = fit600->Parameter(1);
-double slope700 = fit700->Parameter(1);
-double slope800 = fit800->Parameter(1);
-double slope900 = fit900->Parameter(1);
-double slope1000 = fit1000->Parameter(1);
-// Get slope errors
-double slopeErr100 = fit100->ParError(1);
-double slopeErr200 = fit200->ParError(1);
-double slopeErr300 = fit300->ParError(1);
-double slopeErr400 = fit400->ParError(1);
-double slopeErr500 = fit500->ParError(1);
-double slopeErr600 = fit600->ParError(1);
-double slopeErr700 = fit700->ParError(1);
-double slopeErr800 = fit800->ParError(1);
-double slopeErr900 = fit900->ParError(1);
-double slopeErr1000 = fit1000->ParError(1);
+// Get constant values
+double constant100 = fit100->Parameter(0);
+double constant200 = fit200->Parameter(0);
+double constant300 = fit300->Parameter(0);
+double constant400 = fit400->Parameter(0);
+double constant500 = fit500->Parameter(0);
+double constant600 = fit600->Parameter(0);
+double constant700 = fit700->Parameter(0);
+double constant800 = fit800->Parameter(0);
+double constant900 = fit900->Parameter(0);
+double constant1000 = fit1000->Parameter(0);
+// Get constant errors
+double constantErr100 = fit100->ParError(0);
+double constantErr200 = fit200->ParError(0);
+double constantErr300 = fit300->ParError(0);
+double constantErr400 = fit400->ParError(0);
+double constantErr500 = fit500->ParError(0);
+double constantErr600 = fit600->ParError(0);
+double constantErr700 = fit700->ParError(0);
+double constantErr800 = fit800->ParError(0);
+double constantErr900 = fit900->ParError(0);
+double constantErr1000 = fit1000->ParError(0);
 
 // Values and errors on axes
 const int n_points=10;
 double x_vals[n_points]= 
     {100,200,300,400,500,600,700,800,900,1000};
 double y_vals[n_points]=
-    {slope100,slope200,slope300,slope400,slope500,slope600,slope700,slope800,slope900,slope1000};
+    {constant100,constant200,constant300,constant400,constant500,constant600,constant700,constant800,constant900,constant1000};
 double y_errs[n_points]=
-    {slopeErr100,slopeErr200,slopeErr300,slopeErr400,slopeErr500,slopeErr600,slopeErr700,slopeErr800,slopeErr900,slopeErr1000};
+    {constantErr100,constantErr200,constantErr300,constantErr400,constantErr500,constantErr600,constantErr700,constantErr800,constantErr900,constantErr1000};
 
 // Instance of the graph
 TGraphErrors graph(n_points,x_vals,y_vals,nullptr,y_errs);
-graph.SetTitle("nCapture Times Exponential Slopes; Neutron beam energy[MeV]; Slope");
+graph.SetTitle("nCapture Times Exponential Constants; Neutron beam energy[MeV]; Constant");
 
 // Make the plot aesthetically better
 graph.SetMarkerStyle(kOpenCircle);
 graph.SetMarkerColor(kBlue);
+graph.SetMarkerSize(0.1);
 graph.SetLineColor(kBlue);
 
 // The canvas on which we'll draw the graph
@@ -84,5 +85,5 @@ graph.DrawClone("APE");
 }
 
 int main(){
-    plotTimesnCaptureSlopes();
+    plotTimesnCaptureConstants();
 }
