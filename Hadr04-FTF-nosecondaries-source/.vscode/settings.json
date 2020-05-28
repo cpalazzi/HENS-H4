@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "plotHisto.C": "cpp",
+        "*.icc": "cpp",
+        "*.tcc": "cpp",
+        "cmath": "cpp",
+        "functional": "cpp",
+        "mesh": "cpp",
+        "normal": "cpp",
+        "hplot": "cpp",
+        "geom2": "cpp",
+        "mat4": "cpp",
+        "path": "cpp",
+        "state": "cpp"
+    }
+}

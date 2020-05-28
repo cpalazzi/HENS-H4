@@ -3,6 +3,8 @@
         "plotHisto.C": "cpp",
         "plotHistoStack.C": "cpp",
         "plotTimesnCaptureSlopes.C": "cpp",
-        "plotTimesnCaptureConstants.C": "cpp"
+        "plotTimesnCaptureConstants.C": "cpp",
+        "plotHistoPads.C": "cpp",
+        "plotnCaptureMeanTimes.C": "cpp"
     }
 }

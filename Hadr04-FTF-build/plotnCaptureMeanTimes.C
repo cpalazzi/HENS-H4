@@ -1,4 +1,4 @@
-void plotTimesnCaptureSlopes(){
+void plotnCaptureMeanTimes(){
 
 // Open files
 TFile *f1 = TFile::Open("water100out.root");
@@ -11,28 +11,33 @@ TFile *f7 = TFile::Open("water700out.root");
 TFile *f8 = TFile::Open("water800out.root");
 TFile *f9 = TFile::Open("water900out.root");
 TFile *f10 = TFile::Open("water1000out.root");
+
+TF1 *myexp = new TF1("myexp","[0]*exp(-x/[1])");
+myexp->SetParameter(1,1);
+
+
 // Get curves and fits
 // N option stops fits being drawn
 TH1D* hist100 = (TH1D*)f1->Get("8");
-TFitResultPtr fit100 = hist100->Fit("expo","SN");
+TFitResultPtr fit100 = hist100->Fit("myexp","SN");
 TH1D* hist200 = (TH1D*)f2->Get("8");
-TFitResultPtr fit200 = hist200->Fit("expo","SN");
+TFitResultPtr fit200 = hist200->Fit("myexp","SN");
 TH1D* hist300 = (TH1D*)f3->Get("8");
-TFitResultPtr fit300 = hist300->Fit("expo","SN");
+TFitResultPtr fit300 = hist300->Fit("myexp","SN");
 TH1D* hist400 = (TH1D*)f4->Get("8");
-TFitResultPtr fit400 = hist400->Fit("expo","SN");
+TFitResultPtr fit400 = hist400->Fit("myexp","SN");
 TH1D* hist500 = (TH1D*)f5->Get("8");
-TFitResultPtr fit500 = hist500->Fit("expo","SN");
+TFitResultPtr fit500 = hist500->Fit("myexp","SN");
 TH1D* hist600 = (TH1D*)f6->Get("8");
-TFitResultPtr fit600 = hist600->Fit("expo","SN");
+TFitResultPtr fit600 = hist600->Fit("myexp","SN");
 TH1D* hist700 = (TH1D*)f7->Get("8");
-TFitResultPtr fit700 = hist700->Fit("expo","SN");
+TFitResultPtr fit700 = hist700->Fit("myexp","SN");
 TH1D* hist800 = (TH1D*)f8->Get("8");
-TFitResultPtr fit800 = hist800->Fit("expo","SN");
+TFitResultPtr fit800 = hist800->Fit("myexp","SN");
 TH1D* hist900 = (TH1D*)f9->Get("8");
-TFitResultPtr fit900 = hist900->Fit("expo","SN");
+TFitResultPtr fit900 = hist900->Fit("myexp","SN");
 TH1D* hist1000 = (TH1D*)f10->Get("8");
-TFitResultPtr fit1000 = hist1000->Fit("expo","SN");
+TFitResultPtr fit1000 = hist1000->Fit("myexp","SN");
 
 // Get slope values
 double slope100 = fit100->Parameter(1);
@@ -68,7 +73,7 @@ double y_errs[n_points]=
 
 // Instance of the graph
 TGraphErrors graph(n_points,x_vals,y_vals,nullptr,y_errs);
-graph.SetTitle("nCapture Times Exponential Slopes; Neutron beam energy[MeV]; Slope");
+graph.SetTitle("nCapture Exponential Mean Decay Times; Neutron beam energy [MeV]; Mean Decay Time [ms]");
 
 // Make the plot aesthetically better
 graph.SetMarkerStyle(kOpenCircle);
@@ -84,5 +89,5 @@ graph.DrawClone("APE");
 }
 
 int main(){
-    plotTimesnCaptureSlopes();
+    plotnCaptureMeanTimes();
 }
