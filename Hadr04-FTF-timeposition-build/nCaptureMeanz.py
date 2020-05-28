@@ -44,11 +44,11 @@ energies = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
 #mostlybelow = np.array(mostlybelow)
 #energies = np.array(energies)
 
-#def test_func(z, a, b):
-#    return a+b*np.log(z)
-
 def test_func(z, a, b):
-    return a+b*z**(1/3)
+    return a+b*np.log(z)
+
+#def test_func(z, a, b):
+#    return a+b*z**(1/3)
 
 params, params_covariance = scipy.optimize.curve_fit(test_func,  energies,  meanz)
 
@@ -72,7 +72,7 @@ plt.xlabel('Neutron Energy (MeV)')
 plt.ylabel('z (m)')
 plt.xlim(left=0)
 plt.ylim(bottom=0)
-plt.legend()
+plt.legend(loc=(0.7,0.5))
 plt.savefig('nCapturemeanz.png', dpi=800, bbox_inches='tight')
 plt.show()
     
