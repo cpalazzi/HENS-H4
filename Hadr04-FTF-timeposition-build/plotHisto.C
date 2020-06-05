@@ -5,7 +5,7 @@
   //   
   //TFile f = TFile("Water_on.root");
   //... or ...
-  TFile *f1 = TFile::Open("water1000out.root");
+  TFile *f1 = TFile::Open("water10out.root");
   
   TCanvas* c1 = new TCanvas("c1", "  ");
   c1->SetLogy(0);
@@ -49,7 +49,7 @@
   cout<<"\n Slope "<<slope; 
   cout<<"\n Decay time "<<-1*TMath::Power(slope,-1);
   Double_t slope_err = r->ParError(1);             // retrieve the error for the parameter 1
-  r->Print("Q");                                // print minimum information of fit including covariance matrix
+  r->Print("Q");                              // print minimum information of fit including covariance matrix
   hist8->Draw(); 
 
 

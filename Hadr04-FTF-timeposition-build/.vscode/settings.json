@@ -2,6 +2,8 @@
     "files.associations": {
         "plotnCaptureMeanTimes.C": "cpp",
         "plotnCaptureMeanTimes copy.C": "cpp",
-        "plotnCaptureMeanTimes_2.C": "cpp"
+        "plotnCaptureMeanTimes_2.C": "cpp",
+        "plotnCaptureMeanTimesSeed.C": "cpp",
+        "plotHisto.C": "cpp"
     }
 }

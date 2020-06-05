@@ -1,4 +1,4 @@
-void plotnCaptureMeanTimes_2(){
+void plotnCaptureMeanTimesSeed(){
 
 // Open files
 TFile *f1 = TFile::Open("water100out.root");
@@ -89,5 +89,5 @@ graph.DrawClone("APE");
 }
 
 int main(){
-    plotnCaptureMeanTimes_2();
+    plotnCaptureMeanTimesSeed();
 }
