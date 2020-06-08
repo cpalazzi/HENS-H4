@@ -114,7 +114,8 @@ plt.plot(energies, test_func(energies, params[0], params[1]),
 
 # Label plot points with their values
 for i, txt in enumerate(meanv):
-    plt.annotate(txt, (energies[i], meanv[i]), xytext=(3,-10), textcoords='offset pixels')
+    if i>=9:
+        plt.annotate(txt, (energies[i], meanv[i]), xytext=(3,-10), textcoords='offset pixels')
     
 plt.title('Mean neutron radial speed', y=1.05)
 plt.xlabel('Neutron Energy (MeV)')
