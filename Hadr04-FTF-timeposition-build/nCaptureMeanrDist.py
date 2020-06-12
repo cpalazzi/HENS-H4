@@ -32,9 +32,12 @@ df700 = pd.read_csv('timepositions700.csv', names=['t', 'x', 'y', 'z'])
 df800 = pd.read_csv('timepositions800.csv', names=['t', 'x', 'y', 'z'])
 df900 = pd.read_csv('timepositions900.csv', names=['t', 'x', 'y', 'z'])
 df1000 = pd.read_csv('timepositions1000.csv', names=['t', 'x', 'y', 'z'])
+df2000 = pd.read_csv('timepositions2000.csv', names=['t', 'x', 'y', 'z'])
+
 
 dflist = [df10, df20, df30, df40, df50, df60, df70, df80, df90\
-          , df100, df200, df300, df400, df500, df600, df700, df800, df900, df1000]
+          , df100, df200, df300, df400, df500, df600, df700, df800, df900, df1000\
+          , df2000]
 
 # Convert units to metres and microseconds
 for df in dflist: 
@@ -65,7 +68,7 @@ for i in dflist:
     quantile68.append(round(i['rdist'].quantile(0.68), 3))
     
 energies = [10,20,30,40,50,60,70,80,90\
-            ,100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+            ,100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000]
 
 yerror = []
 for i in dflist:
@@ -79,10 +82,22 @@ def test_func(z, a, b):
 #    return a+b*1/z
 
 
+# Fitting the mean as a function of the energy
 params, params_covariance = optimize.curve_fit(test_func,  energies,  meanrdist)
+fit = test_func(energies, params[0], params[1])
+# Goodness of fit
+# residual sum of squares
+ss_res = np.sum((meanrdist - fit) ** 2)
+
+# total sum of squares
+ss_tot = np.sum((meanrdist - np.mean(meanrdist)) ** 2)
+
+# r-squared
+r2 = 1 - (ss_res / ss_tot)
 
 print('a =', params[0])
 print('b =', params[1])
+print('r2 = '+str(r2))
 
 # Mean rdist by energy plot
 plt.plot(energies, quantile95, 'bo--', linewidth=0.5, markersize=0.5,\
@@ -90,21 +105,20 @@ plt.plot(energies, quantile95, 'bo--', linewidth=0.5, markersize=0.5,\
 plt.plot(energies, quantile68, 'co--', linewidth=0.5, markersize=0.5,\
          label='0.68 quantile')
 
-plt.plot(energies, meanrdist, 'bo-', linewidth=0.5, markersize=2, label='Mean r dist')
-plt.errorbar(energies, meanrdist, yerr=yerror)
+plt.errorbar(energies, meanrdist, yerr=yerror, fmt='b-', label='Mean r dist', ecolor='r', linewidth=0.5, elinewidth=1)
 
 plt.plot(energies, quantile32, 'co--', linewidth=0.5, markersize=0.5,\
          label='0.32 quantile')
 plt.plot(energies, quantile05, 'bo--', linewidth=0.5, markersize=0.5,\
          label='0.05 quantile')
 
-plt.plot(energies, test_func(energies, params[0], params[1]),
-         label='Fitted function')
+plt.plot(energies, fit,
+         label='Fitted function', linewidth=0.5, color='orange')
 
 # Label plot points with their values
 for i, txt in enumerate(meanrdist):
     if i>=9:
-        plt.annotate(txt, (energies[i], meanrdist[i]), xytext=(3,-10), textcoords='offset pixels')
+        plt.annotate(txt, (energies[i], meanrdist[i]), xytext=(3,-10), textcoords='offset pixels', fontsize=4)
 
 plt.title('Mean r distance of nCapture', y=1.05)
 plt.xlabel('Neutron Energy (MeV)')
@@ -112,7 +126,7 @@ plt.ylabel('Distance (m)')
 plt.xlim(left=0)
 plt.ylim(bottom=0)
 plt.legend(loc=(0.7,0.5))
-plt.savefig('nCapturemeanrdist.png', dpi=800, bbox_inches='tight')
+plt.savefig('images/nCapturemeanrdist.png', dpi=800, bbox_inches='tight')
 plt.show()
 
 # rdist vs t scatterplots
@@ -124,8 +138,11 @@ for i in range(4):
         if numplot<len(dflist):
             if numplot<10:
                 ax[i, j].text(5, 1600, str((numplot+1)*10)+' MeV'+'\n'+str(len(dflist[numplot]['rdist']))+' entries', fontsize=4, ha='center')
-            elif numplot>=10:
+            elif numplot>=10 and numplot<19:
                 ax[i, j].text(5, 1600, str((numplot-8)*100)+' MeV'+'\n'+str(len(dflist[numplot]['rdist']))+' entries', fontsize=4, ha='center')
+            elif numplot==19:
+                ax[i, j].text(5, 1600, str(2000)+' MeV'+'\n'+str(len(dflist[numplot]['rdist']))+' entries', fontsize=4, ha='center')
+            
             ax[i, j].scatter(dflist[numplot]['rdist'], dflist[numplot]['t'], s=0.1, edgecolors='none')
             ax[i, j].set_xlim(left=0, right=14)
             ax[i, j].set_ylim(bottom=0, top=2100)
@@ -135,4 +152,29 @@ fig.suptitle('r Distance and Time of nCapture')
 fig.text(0.5, 0.01, 'r Distance (m)', ha='center', va='center')
 fig.text(0.01, 0.5, 'Time (microsec)', ha='center', va='center', rotation='vertical')
 
-plt.savefig('nCapturerdist.png', dpi=800, bbox_inches='tight')
+plt.savefig('images/nCapturerdist.png', dpi=800, bbox_inches='tight')
+
+# rdist histograms
+fig, ax = plt.subplots(4, 5, sharex='col', sharey='row')
+# axes are in a two-dimensional array, indexed by [row, col]
+numplot = 0
+for i in range(4):
+    for j in range(5):
+        if numplot<len(dflist):
+            if numplot<10:
+                ax[i, j].text(4, 800, str((numplot+1)*10)+' MeV'+'\n'+str(len(dflist[numplot]['rdist']))+' entries', fontsize=4, ha='center')
+            elif numplot>=10 and numplot<19:
+                ax[i, j].text(4, 800, str((numplot-8)*100)+' MeV'+'\n'+str(len(dflist[numplot]['rdist']))+' entries', fontsize=4, ha='center')
+            elif numplot==19:
+                ax[i, j].text(4, 800, str(2000)+' MeV'+'\n'+str(len(dflist[numplot]['rdist']))+' entries', fontsize=4, ha='center')
+            ax[i, j].hist(dflist[numplot]['rdist'], bins=100)
+            ax[i, j].set_xlim(left=0, right=6)
+            ax[i, j].set_ylim(bottom=0, top=1000)
+            numplot+=1
+
+fig.suptitle('r Distance of nCapture Counts')
+fig.text(0.5, 0.01, 'r Distance (m)', ha='center', va='center')
+fig.text(0.01, 0.5, 'Count (100 bins)', ha='center', va='center', rotation='vertical')
+
+plt.savefig('images/nCapturerdisthisto.png', dpi=800, bbox_inches='tight')
+plt.show()

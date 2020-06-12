@@ -54,11 +54,11 @@ for i in dflist:
 #print(curve_fit(func, X, df100, p0))
 
 df300['x'].hist()
-plt.savefig('xhist.png', dpi=800, bbox_inches='tight')
+plt.savefig('images/xhist.png', dpi=800, bbox_inches='tight')
 
 pd.plotting.scatter_matrix(df100, diagonal="kde")
 plt.tight_layout()
-plt.savefig('scattermatrix.png', dpi=800, bbox_inches='tight')
+plt.savefig('images/scattermatrix.png', dpi=800, bbox_inches='tight')
 plt.show()
 
 #g = sns.lmplot("x", "z", df100, hue="t", fit_reg=False);
@@ -81,7 +81,7 @@ print(mean1000)
 qqplot(df100['t'], line='s', dist=stats.laplace)
 pyplot.show()
 qqplot(df100['x'], line='s', dist=stats.laplace)
-plt.savefig('xlaplaceqq.png', dpi=800, bbox_inches='tight')
+plt.savefig('images/xlaplaceqq.png', dpi=800, bbox_inches='tight')
 pyplot.show()
 qqplot(df100['z'], line='s', dist=stats.laplace)
 pyplot.show()
