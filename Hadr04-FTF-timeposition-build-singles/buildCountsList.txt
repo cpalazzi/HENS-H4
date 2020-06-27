@@ -1,0 +1,1 @@
+for ((n=0;n<100;n++)); do ./Hadr04 water1.mac|python nCaptureIndividualCount.py; done
