@@ -87,12 +87,15 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   if(!process_name.compare("nCapture")){
     G4double time_finish=aStep->GetPostStepPoint()->GetGlobalTime();
     G4ThreeVector position_finish=aStep->GetPostStepPoint()->GetPosition();
+    G4int eventid=G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
     ofstream positionsfile;
     positionsfile.open ("timepositions.csv", ios_base::app);
     positionsfile << time_finish << ",";
     positionsfile << position_finish[0] << ",";
     positionsfile << position_finish[1] << ",";
-    positionsfile << position_finish[2] << "\n";
+    positionsfile << position_finish[2] << ",";
+    positionsfile << eventid <<"\n";
+
     positionsfile.close();
     //G4cout<<position_finish;
     //fTrackingAction->UpdateTrackInfo(t_finish);

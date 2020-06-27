@@ -2,7 +2,7 @@
 # Macro file for "Hadr04.cc"
 # (can be run in batch, without graphic)
 #
-# neutron 100 MeV; all processes
+# neutron 200 MeV; all processes
 #
 /control/verbose 2
 /run/verbose 2

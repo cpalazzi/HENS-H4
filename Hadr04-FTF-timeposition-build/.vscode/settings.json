@@ -5,5 +5,6 @@
         "plotnCaptureMeanTimes_2.C": "cpp",
         "plotnCaptureMeanTimesSeed.C": "cpp",
         "plotHisto.C": "cpp"
-    }
+    },
+    "python.pythonPath": "/Users/carlopalazzi/opt/anaconda3/bin/python"
 }

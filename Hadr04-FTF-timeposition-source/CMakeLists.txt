@@ -47,6 +47,33 @@ set(Hadr04_SCRIPTS
     hadr04.in 
     run01.mac 
     vis.mac
+    water1.mac
+    water2.mac
+    water3.mac
+    water4.mac
+    water5.mac
+    water6.mac
+    water7.mac
+    water8.mac
+    water9.mac
+    water10.mac
+    water11.mac
+    water12.mac
+    water13.mac
+    water14.mac
+    water15.mac
+    water16.mac
+    water17.mac
+    water18.mac
+    water19.mac
+    water20.mac
+    water30.mac
+    water40.mac
+    water50.mac
+    water60.mac
+    water70.mac
+    water80.mac
+    water90.mac
     water100.mac
     water200.mac
     water300.mac
@@ -57,6 +84,7 @@ set(Hadr04_SCRIPTS
     water800.mac
     water900.mac
     water1000.mac
+    water2000.mac
     plotHisto.C
   )
 
