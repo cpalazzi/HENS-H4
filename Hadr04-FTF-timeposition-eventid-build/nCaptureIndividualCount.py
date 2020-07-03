@@ -7,6 +7,10 @@ Created on Fri May 29 09:13:25 2020
 """
 
 # %%
+%matplotlib auto 
+# Sets plots to appear in separate window
+# Comment out and restart kernel to reset to inline plots
+
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
@@ -16,7 +20,9 @@ from scipy import optimize
 import numpy.random as ra
 from scipy.optimize import minimize
 from scipy.special import factorial
-from scipy import stats
+from scipy import interpolate
+
+
 # %%
 # Read and combine datasets
 df1 = pd.read_csv('timepositions1.csv', names=['t', 'x', 'y', 'z','eventid'])
@@ -245,92 +251,111 @@ for energy, dfc in dfcountcouples:
 print(dfcount2000.head())
 
 # %%
-dfenergyncap = pd.concat(dfcountlist, ignore_index=True)
+dfeidncape = pd.concat(dfcountlist, ignore_index=True)
 
-print(len(dfenergyncap))
+print(len(dfeidncape))
+dfeidncape
 
 # %%
-plt.scatter(dfenergyncap['energy'],dfenergyncap['ncapcount'], s=0.5)
+plt.scatter(dfeidncape['energy'],dfeidncape['ncapcount'], s=0.5)
 plt.xlabel('Energy (MeV)')
 plt.ylabel('Number of nCap in event')
 plt.savefig('images/E_nCap_scatter.png', dpi=800, bbox_inches='tight')
 plt.show()
 
 # %%
-plt.hist2d(dfenergyncap['energy'], dfenergyncap['ncapcount'], cmap=plt.cm.jet, bins=50)
-plt.xlabel('Energy (MeV)')
-plt.ylabel('Number of nCap in event')
-plt.colorbar().set_label('Number of events')
-plt.savefig('images/E_nCap_2dhisto.png', dpi=800, bbox_inches='tight')
-plt.show()
-
-# # %%
-# def poisson(k, lamb):
-#     """poisson pdf, parameter lamb is the fit parameter"""
-#     return (lamb**k/factorial(k)) * np.exp(-lamb)
-
-# def negative_log_likelihood(params, data):
-#     ''' better alternative using scipy '''
-#     return -stats.poisson.logpmf(data, params[0]).sum()
-
-# data10 = dfenergyncap['ncapcount'].where(dfenergyncap['energy']==10)
-
-# # minimize the negative log-Likelihood
-
-# result = minimize(negative_log_likelihood,  # function to minimize
-#                   x0=np.ones(1),            # start value
-#                   args=(data10,),             # additional arguments for function
-#                   method='Powell',          # minimization method, see docs
-#                   )
-# # result is a scipy optimize result object, the fit parameters 
-# # are stored in result.x
-# print(result)
-
-
+dfenergyncap = dfeidncape.groupby(['energy','ncapcount']).size().reset_index()
+dfenergyncap.columns = ['energy','ncapcount','eventcount']
+dfenergyncap
+dfenergyncap['eventcount'] = dfenergyncap['eventcount']/2000 
 # %%
-# Create test function
-def poisson(k, lamb, scale):
-    return scale*(lamb**k/factorial(k))*np.exp(-lamb)
+points = dfenergyncap[['energy','ncapcount']].to_numpy()
+values = dfenergyncap['eventcount'].to_numpy()
+print(points)
+print(values)
+# %%
+from scipy.interpolate import LinearNDInterpolator
+myInterpolator = LinearNDInterpolator(points, values)
+# %%
+x = np.linspace(0,2000,50)
+y = np.linspace(0,40,50)
+z = myInterpolator(x,y)
+print(len(x))
+print(len(y))
+print(len(z))
+# %%
 
+print(z)
 
-# Fitting the count as a function of the energy ############################
-params, params_covariance = optimize.curve_fit(poisson,  dfcount100['ncapcount'])
-fit = test_func(energies, params[0], params[1])
-# Goodness of fit
-# residual sum of squares
-ss_res = np.sum((entries - fit) ** 2)
-
-# total sum of squares
-ss_tot = np.sum((entries - np.mean(entries)) ** 2)
-
-# r-squared
-r2 = 1 - (ss_res / ss_tot)
-
-print('m =', params[0])
-print('b =', params[1])
-print('r2 = '+str(r2))
-
-plt.plot(energies, entries, 'ro-', linewidth=0.5, markersize=0.5)
-# Label plot points with their values
-for i, txt in enumerate(entries):
-    if i>=9:
-        plt.annotate(txt, (energies[i], entries[i]), xytext=(5,-5), textcoords='offset pixels', fontsize=4)
-# Plot fitted function
-plt.plot(energies, fit,
-         label='Fitted function', linewidth=0.5, color='orange')
-
-plt.title('Number of nCapture Events', y=1.05)
-plt.xlabel('Neutron Energy (MeV)')
-plt.ylabel('Number')
-plt.savefig('images/nCaptureEntries.png', dpi=800, bbox_inches='tight')
+plt.plot(x, z)
 plt.show()
 
 # %%
-df100bar = df100bar/2000
-df100bar.plot(kind='bar')
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(x, y, z)
+ax.set_xlabel('Energy (MeV)')
+ax.set_ylabel('Number of nCapture in event')
+ax.set_zlabel('Number of events')
 
 # %%
-c = dfenergyncap.groupby(['energy','ncapcount'], as_index=False).size().to_frame()
-c.head()
-c['name'] = 'size'
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+
+X = np.linspace(0, 2000, 50)
+Y = np.linspace(0, 50, 50)
+X, Y = np.meshgrid(X, Y)
+Z = nefit
+surf = ax.plot_surface(X, Y, Z, linewidth=0, antialiased=False, cmap=cm.coolwarm)
+ax.set_xlabel('Energy (MeV)')
+ax.set_ylabel('Number of nCapture in event')
+ax.set_zlabel('Number of events')
+plt.show()
+
+plt.show()
+# %%
+from scipy.interpolate import bisplrep, bisplev
+
+e = dfenergyncap['energy'].to_numpy()
+nc = dfenergyncap['ncapcount'].to_numpy() 
+ne = dfenergyncap['eventcount'].to_numpy() 
+bispl = bisplrep(e, nc, ne)
+
+print(bispl)
+
+efit = np.linspace(0, 2000, 50)
+ncfit = np.linspace(0, 50, 50)
+nefit = bisplev(efit, ncfit, bispl)
+
+print(nefit)
+
+# %%
+plt.plot(efit, nefit)
+plt.xlabel('Neutron beam energy (MeV)')
+plt.ylabel('Number of events')
+
+# %%
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+
+X = np.linspace(0, 2000, 50)
+Y = np.linspace(0, 50, 50)
+X, Y = np.meshgrid(X, Y)
+Z = nefit
+surf = ax.plot_surface(X, Y, Z, linewidth=0, antialiased=False, cmap=cm.coolwarm)
+ax.set_xlabel('Energy (MeV)')
+ax.set_ylabel('Number of nCapture in event')
+ax.set_zlabel('Number of events')
+plt.show()
+# %%
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(dfenergyncap['energy'], dfenergyncap['ncapcount'], dfenergyncap['eventcount'])
+ax.set_xlabel('Energy (MeV)')
+ax.set_ylabel('Number of nCapture in event')
+ax.set_zlabel('Number of events')
+
 # %%
