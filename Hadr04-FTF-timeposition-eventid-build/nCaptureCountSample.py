@@ -111,7 +111,8 @@ area = np.trapz(grid_z0,NumNCap,axis=0)
 # %%
 # Normalise
 grid_z0_norm = grid_z0/area
-
+# %%
+print(grid_z0_norm[0])
 # %%
 # Check normalisation
 areacheck = np.trapz(grid_z0_norm,NumNCap,axis=0)
@@ -128,20 +129,32 @@ plt.show()
 # number of events whole number
 # I'm thinking Choices are on x axis, weights on y
 
-choice = random.choices(NumNCap, weights=grid_z0_norm)
-print(choice)
-
-
+choicelist = random.choices(NumNCap, weights=grid_z0_norm, k=10)
+choicelist = [int(i) for i in choicelist]
+print(choicelist)
 
 
 # %%
-def ncapsim(numn,energy):
-        int numncap = 0
-        for i in range(numn):
+from scipy.interpolate import griddata
+def ncapsim(energy, numn=1):
+        NumNCap = range(40)
+        energy,NumNCap = np.meshgrid(energy,NumNCap)
+        # interpolate
+        grid_z0 = griddata(points, values, (energy,NumNCap), method='linear')
+        # Replace nans with 0
+        grid_z0 = np.nan_to_num(grid_z0)
+        # Calculate area under interpolation at given energy
+        area = np.trapz(grid_z0,NumNCap,axis=0)
+        # Normalise
+        grid_z0_norm = grid_z0/area
+        # Sample
+        choicelist = random.choices(NumNCap, weights=grid_z0_norm, k=numn)
+        choicelist = [int(i) for i in choicelist]
 
-                grid_z = griddata(points, values, (x,energy), method='linear')
-        return numncap
+        return choicelist
 
+# %%
+print(ncapsim(305, 6))
 # %%
 # Specify an energy to sample at. Get random numncap using randn/choice
 # This returns number of events, which is proportional to a probability. 
