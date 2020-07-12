@@ -21,6 +21,7 @@ import numpy.random as ra
 from scipy.optimize import minimize
 from scipy.special import factorial
 from scipy import interpolate
+import random
 
 
 # %%
@@ -76,20 +77,20 @@ plt.show()
 # %%
 # %%
 # 3D scatter plot griddata interpolation
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.scatter(x, y, grid_z0)
-ax.set_xlabel('Energy (MeV)')
-ax.set_ylabel('Number of nCapture in event')
-ax.set_zlabel('Number of events')
-plt.show()
+# from mpl_toolkits.mplot3d import Axes3D
+# from matplotlib import cm
+# fig = plt.figure()
+# ax = fig.add_subplot(111, projection='3d')
+# ax.scatter(x, y, grid_z0)
+# ax.set_xlabel('Energy (MeV)')
+# ax.set_ylabel('Number of nCapture in event')
+# ax.set_zlabel('Number of events')
+# plt.show()
 
 # %%
 # griddata interpolation
-energy = 11
-NumNCap = np.linspace(0,40,10000)
+energy = 10
+NumNCap = range(40)
 energy,NumNCap = np.meshgrid(energy,NumNCap)
 
 from scipy.interpolate import griddata
@@ -99,7 +100,7 @@ grid_z0 = griddata(points, values, (energy,NumNCap), method='linear')
 grid_z0 = np.nan_to_num(grid_z0)
 # %%
 
-plt.plot(NumNCap, grid_z0)
+plt.scatter(NumNCap, grid_z0)
 plt.xlabel('Number of nCap in event')
 plt.ylabel('Number of events')
 plt.show()
@@ -109,22 +110,29 @@ area = np.trapz(grid_z0,NumNCap,axis=0)
 
 # %%
 # Normalise
-grid_z0 = grid_z0/area
+grid_z0_norm = grid_z0/area
 
 # %%
 # Check normalisation
-areacheck = np.trapz(grid_z0,NumNCap,axis=0)
+areacheck = np.trapz(grid_z0_norm,NumNCap,axis=0)
 print('areacheck =', areacheck)
 
-plt.plot(NumNCap, grid_z0)
+plt.scatter(NumNCap, grid_z0_norm)
 plt.xlabel('Number of nCap in event')
 plt.ylabel('Number of events')
 plt.title('Normalised Slice at Set Energy')
 plt.show()
 
+# %%
 # Next need to figure out how to sample from pdf at each energy but making
 # number of events whole number
 # I'm thinking Choices are on x axis, weights on y
+
+choice = random.choices(NumNCap, weights=grid_z0_norm)
+print(choice)
+
+
+
 
 # %%
 def ncapsim(numn,energy):
