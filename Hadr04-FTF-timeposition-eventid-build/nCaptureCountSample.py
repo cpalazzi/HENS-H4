@@ -7,7 +7,7 @@ Created on Fri May 29 09:13:25 2020
 """
 
 # %%
-# %matplotlib auto 
+%matplotlib auto
 # Sets plots to appear in separate window
 # Comment out and restart kernel to reset to inline plots
 
@@ -17,9 +17,6 @@ from matplotlib import pyplot as plt
 #from matplotlib import rc
 #rc('text', usetex=False)
 from scipy import optimize
-import numpy.random as ra
-from scipy.optimize import minimize
-from scipy.special import factorial
 from scipy.interpolate import griddata
 import random
 
@@ -51,11 +48,11 @@ def ncapsim(energy, numn=1):
 
 # %%
 # Check sampler gives correct results
-energies = list(range(10,100,10))+(list(range(100,2100,100)))
+energies = list(range(10,2000,10))
 
 testdf = pd.DataFrame(columns=['energy','ncapcount'])
 
-numn = 2000
+numn = 100
 for i in energies:
         elist = numn*[i]
         ncapcountlist = ncapsim(i,numn)

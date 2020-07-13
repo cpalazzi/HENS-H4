@@ -268,7 +268,7 @@ dfenergyncap = dfeidncape.groupby(['energy','ncapcount']).size().reset_index()
 dfenergyncap.columns = ['energy','ncapcount','eventcount']
 dfenergyncap
 dfenergyncap['eventcount'] = dfenergyncap['eventcount']/2000
-dfenergyncap.to_csv('dfenergyncap.csv')
+dfenergyncap.to_csv('dfenergyncap.csv',index=False)
 # %%
 points = dfenergyncap[['energy','ncapcount']].to_numpy()
 values = dfenergyncap['eventcount'].to_numpy()
@@ -437,6 +437,7 @@ surf = ax.plot_surface(x, y, grid_z0, linewidth=0, antialiased=False, cmap=cm.co
 ax.set_xlabel('Energy (MeV)')
 ax.set_ylabel('Number of nCapture in event')
 ax.set_zlabel('Number of events')
+plt.savefig('images/griddata_interp_data_3D.png', dpi=800, bbox_inches='tight')
 plt.show()
 
 # %%
