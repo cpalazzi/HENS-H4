@@ -89,7 +89,7 @@ plt.show()
 
 # %%
 # griddata interpolation
-energy = 10
+energy = 238
 NumNCap = range(40)
 energy,NumNCap = np.meshgrid(energy,NumNCap)
 
@@ -103,6 +103,7 @@ grid_z0 = np.nan_to_num(grid_z0)
 plt.scatter(NumNCap, grid_z0)
 plt.xlabel('Number of nCap in event')
 plt.ylabel('Number of events')
+plt.savefig('images/SingleEnergySlice.png', dpi=800, bbox_inches='tight')
 plt.show()
 
 # %%

@@ -7,7 +7,7 @@ Created on Fri May 29 09:13:25 2020
 """
 
 # %%
-%matplotlib auto
+# %matplotlib auto
 # Sets plots to appear in separate window
 # Comment out and restart kernel to reset to inline plots
 
@@ -47,7 +47,18 @@ def ncapsim(energy, numn=1):
         return choicelist
 
 # %%
-# Check sampler gives correct results
+ncapsim(437, 2)
+# %%
+# Plot sampler result at one energy
+
+# plt.scatter(NumNCap, ncapsim())
+# plt.xlabel('Number of nCap in event')
+# plt.ylabel('Number of events')
+# plt.title('Normalised Slice at Set Energy')
+# plt.show()
+
+# %%
+# Plot sampler results at lots of energies
 energies = list(range(10,2000,10))
 
 testdf = pd.DataFrame(columns=['energy','ncapcount'])
@@ -74,10 +85,12 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-ax.scatter(x, y, z)
+ax.scatter(x, y, z, s=1)
 ax.set_xlabel('Energy (MeV)')
 ax.set_ylabel('Number of nCapture in event')
+ax.set_ylim(-1,40)
 ax.set_zlabel('Number of events')
+plt.savefig('images/Sampled_nCapCount_3D.png', dpi=800)
 plt.show()
 
 # %%
