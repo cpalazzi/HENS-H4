@@ -16,10 +16,11 @@ import numpy as np
 from matplotlib import pyplot as plt
 #from matplotlib import rc
 #rc('text', usetex=False)
-from scipy import optimize
+#from scipy import optimize
 from scipy.interpolate import griddata
 import random
 from scipy import stats
+from multiprocessing import Pool
 
 # %%
 # Read count and positions datasets
@@ -75,10 +76,10 @@ def sample_at_data_energy(en, num=1):
     """
 
     m1, m2, m3 = dfe.loc[dfe['energy'] == en]['rho'], dfe.loc[dfe['energy'] == en]['z'], dfe.loc[dfe['energy'] == en]['t']
-    xmin = dfe.loc[dfe['energy'] == en]['z'].min()
-    xmax = dfe.loc[dfe['energy'] == en]['z'].max()
-    ymin = dfe.loc[dfe['energy'] == en]['rho'].min()
-    ymax = dfe.loc[dfe['energy'] == en]['rho'].max()
+    xmin = dfe.loc[dfe['energy'] == en]['rho'].min()
+    xmax = dfe.loc[dfe['energy'] == en]['rho'].max()
+    ymin = dfe.loc[dfe['energy'] == en]['z'].min()
+    ymax = dfe.loc[dfe['energy'] == en]['z'].max()
     tmin = dfe.loc[dfe['energy'] == en]['t'].min()
     tmax = dfe.loc[dfe['energy'] == en]['t'].max()
 
@@ -120,7 +121,6 @@ def sample_at_data_energy(en, num=1):
 
     return new_data
 
-
 # %%
 def interp_rho_z_t(energy, num=1):
 
@@ -134,13 +134,18 @@ def interp_rho_z_t(energy, num=1):
     en1 = energy_list[loc_left]
     en2 = energy_list[loc_right]
 
-    samplearr1 = sample_at_data_energy(en1,num)
-    samplearr2 = sample_at_data_energy(en2,num)
+
+    if __name__ == '__main__':
+        p = Pool(2)
+        results = p.starmap(sample_at_data_energy, [(en1, num), (en2, num)])
+
+    samplearr1 = results[0]
+    samplearr2 = results[1]
     i = 0
     list_out_rho_z = []
     while i < np.shape(samplearr1)[0]:
         new_data1 = samplearr1[i]
-        new_data2 = samplearr2[i] 
+        new_data2 = samplearr2[i]
         values_to_interp = np.vstack([new_data1, new_data2])#.transpose()
         list_out_rho_z.append(griddata([en1, en2], values_to_interp, energy, method='linear', rescale=True))
         i+=1
@@ -157,7 +162,22 @@ def ncap_sim(energy, num_n=1):
     # Get number of ncaps
     num_ncaps = sum(ncap_num(energy, num_n))
     # Get positions
-    return interp_rho_z_t(energy, num_ncaps)
+    if energy in energy_list:
+        return pd.DataFrame(sample_at_data_energy(energy, num_ncaps), columns=['rho', 'z', 't'])
+    else:
+        return interp_rho_z_t(energy, num_ncaps)
 
-# %% 
-sample_at_data_energy(200)
+# %%
+import time 
+
+t0 = time.time()
+dfresults=ncap_sim(1875.3, 2000)
+print(ncap_sim(1875.3, 2000))
+t1 = time.time()
+
+total = t1-t0
+print('Execution time: ', total)
+
+# %%
+plt.scatter(dfresults['rho'],dfresults['z'])
+

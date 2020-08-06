@@ -63,7 +63,7 @@ df1000 = pd.read_csv('timepositions1000.csv', usecols=[0,1,2,3], names=['t', 'x'
 df2000 = pd.read_csv('timepositions2000.csv', usecols=[0,1,2,3], names=['t', 'x', 'y', 'z'])
 
 dflist = [df10,df20,df30,df40,df50,df60,df70,df80,df90,df100,\
-    df100,df200,df300,df400,df500,df600,df700,df800,df900,df1000,df2000]
+    df200,df300,df400,df500,df600,df700,df800,df900,df1000,df2000]
 
 # Convert units to metres and microseconds
 for df in dflist: 
