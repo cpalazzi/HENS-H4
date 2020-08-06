@@ -165,13 +165,13 @@ def ncap_sim(energy, num_n=1):
 
 # %%
 t0 = time.time()
-dfresults = ncap_sim(1237, 2000)
+dfresults = ncap_sim(1875.3, 2000)
 t1 = time.time()
 
 total = t1-t0
 print('Execution time: ', total)
 
-plt.scatter(dfresults['rho'], dfresults['z'])
+plt.scatter(dfresults['rho'], dfresults['z'], s=0.2)
 
 
 

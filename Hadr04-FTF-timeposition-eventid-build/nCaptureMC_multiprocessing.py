@@ -179,5 +179,8 @@ total = t1-t0
 print('Execution time: ', total)
 
 # %%
-plt.scatter(dfresults['rho'],dfresults['z'])
+plt.scatter(dfresults['rho'],dfresults['z'], s=0.2)
 
+
+
+# %%
