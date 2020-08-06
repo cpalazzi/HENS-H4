@@ -17,7 +17,7 @@ dfenergyncap = pd.read_csv('dfenergyncap.csv')
 dfe = pd.read_csv('dfe_cylindrical.csv')
 
 dfsim = pd.read_csv('sim_e100_n2000.csv')
-df100 = dfe.loc[dfe['energy'] == 100]
+df400 = dfe.loc[dfe['energy'] == 400]
 
 # %%
 # Plots rho and z
@@ -181,7 +181,6 @@ def plot_figures(figures, nrows = 1, ncols=1):
         ax1.imshow(figures[title])
         #axeslist.ravel()[ind].set_title(title)
         ax1.set_axis_off()
-        ax1.set_aspect('equal')
         #plt.tight_layout() # optional
     plt.savefig('images/correlations_at_energies.png', dpi=800, bbox_inches='tight')
 
@@ -259,23 +258,48 @@ plt.show()
 # Arguably z and counteid are a little correllated. 
 
 # %%
-fig = plt.figure()
+dfmv_e400_n2000 = pd.read_csv('dfmv_e400_n2000.csv')
+dfmv_e1875point3_n2000 = pd.read_csv('dfmv_e1875.3_n2000.csv')
+dfuv_e400_n2000 = pd.read_csv('dfuv_e400_n2000.csv')
+dfmvuv_e400_n2000 = pd.read_csv('dfmvuv_e400_n2000.csv')
 
-ax1 = fig.add_subplot(211)
-ax1.plot([(1, 2), (3, 4)], [(4, 3), (2, 3)])
+df400 = (dfe.loc[dfe['energy'] == 400]).reset_index()
 
-ax2 = fig.add_subplot(212)
-ax2.plot([(7, 2), (5, 3)], [(1, 6), (9, 5)])
-
-plt.show()
-plt.show()
 # %%
-df100.name = 'e100'
-print(df100.name)
+dfmv_e400_n2000['displacement']=np.sqrt(dfmv_e400_n2000['rho']**2+dfmv_e400_n2000['z']**2)
+dfuv_e400_n2000['displacement']=np.sqrt(dfuv_e400_n2000['rho']**2+dfuv_e400_n2000['z']**2)
+df400['displacement']=np.sqrt(df400['rho']**2+df400['z']**2)
+
+
+# %%
+def density_scatter_plot(x, y, energy, num, sim):
+    # Scatter plot data 
+    # Calculate the point density
+    xy = np.vstack([x,y])
+    z = stats.gaussian_kde(xy)(xy)
+
+    # Sort the points by density, so that the densest points are plotted last
+    idx = z.argsort()
+    x, y, z = x[idx], y[idx], z[idx]
+
+    fig, ax = plt.subplots()
+    ax.scatter(x, y, c=z, s=2, edgecolor='')
+    plt.xlabel('rho (m)')
+    plt.ylabel('z (m)')
+    plt.xlim(right=16)
+    plt.ylim(top=12)
+
+    plt.title(f'{sim}: {num} Initial neutrons at {energy} MeV')
+    return plt.show()
+
 # %%
 
-f, axarr = plt.subplots(2,2)
-axarr[0,0].imshow(image_datas[0])
-axarr[0,1].imshow(image_datas[1])
-axarr[1,0].imshow(image_datas[2])
-axarr[1,1].imshow(image_datas[3])
+density_scatter_plot(dfmv_e400_n2000['rho'],dfmv_e400_n2000['z'],400,2000, 'SOHENSmv')
+density_scatter_plot(dfuv_e400_n2000['rho'],dfuv_e400_n2000['z'],400,2000, 'SOHENSuv')
+density_scatter_plot(dfmvuv_e400_n2000['rho'],dfmvuv_e400_n2000['z'],400,2000, 'SOHENSmvuv')
+
+density_scatter_plot(df400['rho'],df400['z'],400,2000, 'HENS')
+
+
+# %%
+# %%

@@ -70,7 +70,56 @@ def ncap_num(energy, num_n=1):
 
 # %%
 # Function to sample from dataset at given energy
-def sample_at_data_energy(var, en, num=1):
+def sample_at_data_energy(en, num=1):
+    
+    """
+    Function that generates sample of rho at z at given energy
+    from stored data.
+    """
+
+    m1, m2 = dfe.loc[dfe['energy'] == en]['rho'], dfe.loc[dfe['energy'] == en]['z']
+    xmin = dfe.loc[dfe['energy'] == en]['rho'].min()
+    xmax = dfe.loc[dfe['energy'] == en]['rho'].max()
+    ymin = dfe.loc[dfe['energy'] == en]['z'].min()
+    ymax = dfe.loc[dfe['energy'] == en]['z'].max()
+
+    X, Y = np.mgrid[xmin:xmax:100j, ymin:ymax:100j] # makes 100 by 100 grid
+    positions = np.vstack([X.ravel(), Y.ravel()])
+    values = np.vstack([m1, m2])
+    kernel = stats.gaussian_kde(values)
+    Z = np.reshape(kernel(positions).T, X.shape)
+
+    # Generate the bins for each axis
+    x_bins = np.linspace(xmin, xmax, Z.shape[0]+1)
+    y_bins = np.linspace(ymin, ymax, Z.shape[1]+1)
+
+    # Find the middle point for each bin
+    x_bin_midpoints = x_bins[:-1] + np.diff(x_bins)/2
+    y_bin_midpoints = y_bins[:-1] + np.diff(y_bins)/2
+
+    # Calculate the Cumulative Distribution Function(CDF)from the PDF
+    cdf = np.cumsum(Z.ravel())
+    cdf = cdf / cdf[-1] # Normalisation
+
+    # Create random data
+    values = np.random.rand(num)
+
+    # Find the data position
+    value_bins = np.searchsorted(cdf, values)
+    x_idx, y_idx = np.unravel_index(value_bins,
+                                    (len(x_bin_midpoints),
+                                    len(y_bin_midpoints)))
+
+    # Create the new data
+    new_data = np.column_stack((x_bin_midpoints[x_idx],
+                                y_bin_midpoints[y_idx]))
+    new_x, new_y = new_data.T
+
+    return new_x, new_y
+
+# %%
+# Function to sample from dataset at given energy
+def sample_var_at_data_energy(var, en, num=1):
     
     """
     Function that generates sample of variable at given energy
@@ -112,9 +161,8 @@ def sample_at_data_energy(var, en, num=1):
     return new_data
 
 def combine_rho_z_t_samples(en,num=1):
-    rho = sample_at_data_energy('rho', en, num).T
-    z = sample_at_data_energy('z', en, num).T
-    t = sample_at_data_energy('t', en, num).T
+    t = sample_var_at_data_energy('t', en, num).T
+    rho, z = sample_at_data_energy(en, num)
     return np.column_stack((rho,z,t))
 
 
@@ -171,27 +219,6 @@ t1 = time.time()
 total = t1-t0
 print('Execution time: ', total)
 
-dfresults.to_csv('dfuv_e400_n2000.csv')
-
-# %%
-# Scatter plot data 
-# Calculate the point density
-x = dfresults['rho']
-y = dfresults['z']
-xy = np.vstack([x,y])
-z = stats.gaussian_kde(xy)(xy)
-
-# Sort the points by density, so that the densest points are plotted last
-idx = z.argsort()
-x, y, z = x[idx], y[idx], z[idx]
-
-fig, ax = plt.subplots()
-ax.scatter(x, y, c=z, s=2, edgecolor='')
-plt.xlabel('rho (m)')
-plt.ylabel('z (m)')
-plt.title('2000 Initial neutrons at 1875.3 MeV')
-plt.show()
-
-
+dfresults.to_csv('dfmvuv_e400_n2000.csv')
 
 # %%
