@@ -10,7 +10,7 @@ Created on Fri Jun 23 09:13:25 2020
 # %matplotlib auto
 # Sets plots to appear in separate window
 # Comment out and restart kernel to reset to inline plots
-
+# import ROOT
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
@@ -23,6 +23,7 @@ from scipy import stats
 from multiprocessing import Pool
 import time 
 import tqdm
+from numba import jit
 
 # %%
 # Read count and positions datasets
@@ -45,6 +46,7 @@ plt.savefig('images/correlation.png', dpi=800, bbox_inches='tight')
 plt.show()
 
 # %%
+@jit(cache=True)
 def ncap_num(energy, num_n=1):
     
     # Split x and y data
@@ -67,9 +69,9 @@ def ncap_num(energy, num_n=1):
 
     return choicelist
 
-
 # %%
 # Function to sample from dataset at given energy
+@jit(cache=True)
 def sample_at_data_energy(en, num=1):
     
     """
@@ -86,7 +88,7 @@ def sample_at_data_energy(en, num=1):
     X, Y = np.mgrid[xmin:xmax:100j, ymin:ymax:100j] # makes 100 by 100 grid
     positions = np.vstack([X.ravel(), Y.ravel()])
     values = np.vstack([m1, m2])
-    kernel = stats.gaussian_kde(values)
+    kernel = stats.gaussian_kde(values, 0.5)
     Z = np.reshape(kernel(positions).T, X.shape)
 
     # Generate the bins for each axis
@@ -119,6 +121,7 @@ def sample_at_data_energy(en, num=1):
 
 # %%
 # Function to sample from dataset at given energy
+@jit(cache=True)
 def sample_var_at_data_energy(var, en, num=1):
     
     """
@@ -133,7 +136,7 @@ def sample_var_at_data_energy(var, en, num=1):
     X = np.mgrid[xmin:xmax:100j] # makes 100 by 100 grid
     positions = np.vstack([X.ravel()])
     values = np.vstack([m1])
-    kernel = stats.gaussian_kde(values)
+    kernel = stats.gaussian_kde(values, 0.5)
     Z = np.reshape(kernel(positions).T, X.shape)
 
     # Generate the bins for each axis
@@ -167,6 +170,7 @@ def combine_rho_z_t_samples(en,num=1):
 
 
 # %%
+@jit(cache=True)
 def interp_rho_z_t(energy, num=1):
 
     """
@@ -201,6 +205,7 @@ def interp_rho_z_t(energy, num=1):
     return df_out_rho_z
 
 # %%
+@jit(cache=True)
 def ncap_sim(energy, num_n=1):
     
     # Get number of ncaps
@@ -213,12 +218,53 @@ def ncap_sim(energy, num_n=1):
 
 # %%
 t0 = time.time()
-dfresults = ncap_sim(400, 2000)
+energy_test = 789
+numn_test = 405
+dfresults = ncap_sim(energy_test, numn_test)
 t1 = time.time()
 
 total = t1-t0
 print('Execution time: ', total)
 
-dfresults.to_csv('dfmvuv_e400_n2000.csv')
+dfresults.to_csv(f'dfmvuv_e{energy_test}_n{numn_test}_bw0.10.csv')
+
+# %%
+# Scatter plot data 
+# Calculate the point density
+x = dfresults['rho']
+y = dfresults['z']
+xy = np.vstack([x,y])
+z = stats.gaussian_kde(xy)(xy)
+
+# Sort the points by density, so that the densest points are plotted last
+idx = z.argsort()
+x, y, z = x[idx], y[idx], z[idx]
+
+fig, ax = plt.subplots()
+ax.scatter(x, y, c=z, s=2, edgecolor='')
+plt.xlabel('rho (m)')
+plt.ylabel('z (m)')
+plt.title(f'{numn_test} Initial neutrons at {energy_test} MeV')
+plt.show()
+
+
+# %%
+# Scatter plot data 
+# Calculate the point density
+x = np.sqrt(dfresults['rho']**2+dfresults['z']**2)
+y = dfresults['t']
+xy = np.vstack([x,y])
+z = stats.gaussian_kde(xy)(xy)
+
+# Sort the points by density, so that the densest points are plotted last
+idx = z.argsort()
+x, y, z = x[idx], y[idx], z[idx]
+
+fig, ax = plt.subplots()
+ax.scatter(x, y, c=z, s=2, edgecolor='')
+plt.xlabel('distance (m)')
+plt.ylabel('t (microsec)')
+plt.title(f'{numn_test} Initial neutrons at {energy_test} MeV')
+plt.show()
 
 # %%

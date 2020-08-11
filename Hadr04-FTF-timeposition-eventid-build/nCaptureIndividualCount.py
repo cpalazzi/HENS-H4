@@ -204,7 +204,7 @@ for i in range(4):
             if numplot==19:
                 ax[i, j].text(10, 1200, str((numplot+1)*100)+' MeV'+'\n'+str(dfcountlist[numplot]['ncapcount'].sum())+' entries', fontsize=4, ha='center') 
             ax[i, j].hist(dfcountlist[numplot]['ncapcount'], np.arange(20)-0.5)
-            ax[i, j].set_xlim(left=-2, right=20)
+            ax[i, j].set_xlim(left=0, right=20)
             ax[i, j].set_ylim(bottom=0, top=2000)
             ax[i, j].set_xticks(range(0,20,5))
 

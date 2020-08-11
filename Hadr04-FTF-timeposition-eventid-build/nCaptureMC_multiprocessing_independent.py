@@ -165,13 +165,15 @@ def ncap_sim(energy, num_n=1):
 
 # %%
 t0 = time.time()
-dfresults = ncap_sim(400, 2000)
+energy_test = 455
+numn_test = 2000
+dfresults = ncap_sim(energy_test, numn_test)
 t1 = time.time()
 
 total = t1-t0
 print('Execution time: ', total)
 
-dfresults.to_csv('dfuv_e400_n2000.csv')
+dfresults.to_csv(f'dfuv_e{energy_test}_n{numn_test}.csv')
 
 # %%
 # Scatter plot data 
@@ -189,7 +191,7 @@ fig, ax = plt.subplots()
 ax.scatter(x, y, c=z, s=2, edgecolor='')
 plt.xlabel('rho (m)')
 plt.ylabel('z (m)')
-plt.title('2000 Initial neutrons at 1875.3 MeV')
+plt.title(f'{numn_test} Initial neutrons at {energy_test} MeV')
 plt.show()
 
 

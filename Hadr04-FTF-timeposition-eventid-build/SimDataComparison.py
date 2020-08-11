@@ -272,7 +272,7 @@ df400['displacement']=np.sqrt(df400['rho']**2+df400['z']**2)
 
 
 # %%
-def density_scatter_plot(x, y, energy, num, sim):
+def density_scatter_plot_rho_z(x, y, energy, num, sim):
     # Scatter plot data 
     # Calculate the point density
     xy = np.vstack([x,y])
