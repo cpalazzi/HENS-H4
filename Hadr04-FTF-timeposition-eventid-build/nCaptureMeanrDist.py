@@ -5,7 +5,7 @@ Created on Fri May 29 09:13:25 2020
 
 @author: carlopalazzi
 """
-
+# %%
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
@@ -13,26 +13,26 @@ from matplotlib import pyplot as plt
 #rc('text', usetex=False)
 from scipy import optimize
 
-df10 = pd.read_csv('timepositions10.csv', names=['t', 'x', 'y', 'z'])
-df20 = pd.read_csv('timepositions20.csv', names=['t', 'x', 'y', 'z'])
-df30 = pd.read_csv('timepositions30.csv', names=['t', 'x', 'y', 'z'])
-df40 = pd.read_csv('timepositions40.csv', names=['t', 'x', 'y', 'z'])
-df50 = pd.read_csv('timepositions50.csv', names=['t', 'x', 'y', 'z'])
-df60 = pd.read_csv('timepositions60.csv', names=['t', 'x', 'y', 'z'])
-df70 = pd.read_csv('timepositions70.csv', names=['t', 'x', 'y', 'z'])
-df80 = pd.read_csv('timepositions80.csv', names=['t', 'x', 'y', 'z'])
-df90 = pd.read_csv('timepositions90.csv', names=['t', 'x', 'y', 'z'])
-df100 = pd.read_csv('timepositions100.csv', names=['t', 'x', 'y', 'z'])
-df200 = pd.read_csv('timepositions200.csv', names=['t', 'x', 'y', 'z'])
-df300 = pd.read_csv('timepositions300.csv', names=['t', 'x', 'y', 'z'])
-df400 = pd.read_csv('timepositions400.csv', names=['t', 'x', 'y', 'z'])
-df500 = pd.read_csv('timepositions500.csv', names=['t', 'x', 'y', 'z'])
-df600 = pd.read_csv('timepositions600.csv', names=['t', 'x', 'y', 'z'])
-df700 = pd.read_csv('timepositions700.csv', names=['t', 'x', 'y', 'z'])
-df800 = pd.read_csv('timepositions800.csv', names=['t', 'x', 'y', 'z'])
-df900 = pd.read_csv('timepositions900.csv', names=['t', 'x', 'y', 'z'])
-df1000 = pd.read_csv('timepositions1000.csv', names=['t', 'x', 'y', 'z'])
-df2000 = pd.read_csv('timepositions2000.csv', names=['t', 'x', 'y', 'z'])
+df10 = pd.read_csv('timepositions10.csv', names=['t', 'x', 'y', 'z','eventid'])
+df20 = pd.read_csv('timepositions20.csv', names=['t', 'x', 'y', 'z','eventid'])
+df30 = pd.read_csv('timepositions30.csv', names=['t', 'x', 'y', 'z','eventid'])
+df40 = pd.read_csv('timepositions40.csv', names=['t', 'x', 'y', 'z','eventid'])
+df50 = pd.read_csv('timepositions50.csv', names=['t', 'x', 'y', 'z','eventid'])
+df60 = pd.read_csv('timepositions60.csv', names=['t', 'x', 'y', 'z','eventid'])
+df70 = pd.read_csv('timepositions70.csv', names=['t', 'x', 'y', 'z','eventid'])
+df80 = pd.read_csv('timepositions80.csv', names=['t', 'x', 'y', 'z','eventid'])
+df90 = pd.read_csv('timepositions90.csv', names=['t', 'x', 'y', 'z','eventid'])
+df100 = pd.read_csv('timepositions100.csv', names=['t', 'x', 'y', 'z','eventid'])
+df200 = pd.read_csv('timepositions200.csv', names=['t', 'x', 'y', 'z','eventid'])
+df300 = pd.read_csv('timepositions300.csv', names=['t', 'x', 'y', 'z','eventid'])
+df400 = pd.read_csv('timepositions400.csv', names=['t', 'x', 'y', 'z','eventid'])
+df500 = pd.read_csv('timepositions500.csv', names=['t', 'x', 'y', 'z','eventid'])
+df600 = pd.read_csv('timepositions600.csv', names=['t', 'x', 'y', 'z','eventid'])
+df700 = pd.read_csv('timepositions700.csv', names=['t', 'x', 'y', 'z','eventid'])
+df800 = pd.read_csv('timepositions800.csv', names=['t', 'x', 'y', 'z','eventid'])
+df900 = pd.read_csv('timepositions900.csv', names=['t', 'x', 'y', 'z','eventid'])
+df1000 = pd.read_csv('timepositions1000.csv', names=['t', 'x', 'y', 'z','eventid'])
+df2000 = pd.read_csv('timepositions2000.csv', names=['t', 'x', 'y', 'z','eventid'])
 
 
 dflist = [df10, df20, df30, df40, df50, df60, df70, df80, df90\
@@ -42,7 +42,7 @@ dflist = [df10, df20, df30, df40, df50, df60, df70, df80, df90\
 # Convert units to metres and microseconds
 for df in dflist: 
     df[df.columns] = df[df.columns]/1000
-
+# %%
 # Create rdist columns
 for i in dflist:
     i['rdist'] = np.sqrt(i['x']**2+i['y']**2+i['z']**2)
@@ -98,7 +98,7 @@ r2 = 1 - (ss_res / ss_tot)
 print('a =', params[0])
 print('b =', params[1])
 print('r2 = '+str(r2))
-
+# %%
 # Mean rdist by energy plot
 plt.plot(energies, quantile95, 'bo--', linewidth=0.5, markersize=0.5,\
          label='0.95 quantile')
@@ -129,6 +129,7 @@ plt.legend(loc=(0.7,0.5))
 plt.savefig('images/nCapturemeanrdist.png', dpi=800, bbox_inches='tight')
 plt.show()
 
+# %%
 # rdist vs t scatterplots
 fig, ax = plt.subplots(4, 5, sharex='col', sharey='row')
 # axes are in a two-dimensional array, indexed by [row, col]
@@ -153,7 +154,7 @@ fig.text(0.5, 0.01, 'r Distance (m)', ha='center', va='center')
 fig.text(0.01, 0.5, 'Time (microsec)', ha='center', va='center', rotation='vertical')
 
 plt.savefig('images/nCapturerdist.png', dpi=800, bbox_inches='tight')
-
+# %%
 # rdist histograms
 fig, ax = plt.subplots(4, 5, sharex='col', sharey='row')
 # axes are in a two-dimensional array, indexed by [row, col]
@@ -178,3 +179,5 @@ fig.text(0.01, 0.5, 'Count (100 bins)', ha='center', va='center', rotation='vert
 
 plt.savefig('images/nCapturerdisthisto.png', dpi=800, bbox_inches='tight')
 plt.show()
+
+# %%

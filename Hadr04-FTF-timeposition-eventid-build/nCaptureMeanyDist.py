@@ -13,16 +13,16 @@ from matplotlib import pyplot as plt
 #rc('text', usetex=False)
 from scipy import optimize
 
-df100 = pd.read_csv('timepositions100.csv', names=['t', 'x', 'y', 'z'])
-df200 = pd.read_csv('timepositions200.csv', names=['t', 'x', 'y', 'z'])
-df300 = pd.read_csv('timepositions300.csv', names=['t', 'x', 'y', 'z'])
-df400 = pd.read_csv('timepositions400.csv', names=['t', 'x', 'y', 'z'])
-df500 = pd.read_csv('timepositions500.csv', names=['t', 'x', 'y', 'z'])
-df600 = pd.read_csv('timepositions600.csv', names=['t', 'x', 'y', 'z'])
-df700 = pd.read_csv('timepositions700.csv', names=['t', 'x', 'y', 'z'])
-df800 = pd.read_csv('timepositions800.csv', names=['t', 'x', 'y', 'z'])
-df900 = pd.read_csv('timepositions900.csv', names=['t', 'x', 'y', 'z'])
-df1000 = pd.read_csv('timepositions1000.csv', names=['t', 'x', 'y', 'z'])
+df100 = pd.read_csv('timepositions100.csv', names=['t', 'x', 'y', 'z','eventid'])
+df200 = pd.read_csv('timepositions200.csv', names=['t', 'x', 'y', 'z','eventid'])
+df300 = pd.read_csv('timepositions300.csv', names=['t', 'x', 'y', 'z','eventid'])
+df400 = pd.read_csv('timepositions400.csv', names=['t', 'x', 'y', 'z','eventid'])
+df500 = pd.read_csv('timepositions500.csv', names=['t', 'x', 'y', 'z','eventid'])
+df600 = pd.read_csv('timepositions600.csv', names=['t', 'x', 'y', 'z','eventid'])
+df700 = pd.read_csv('timepositions700.csv', names=['t', 'x', 'y', 'z','eventid'])
+df800 = pd.read_csv('timepositions800.csv', names=['t', 'x', 'y', 'z','eventid'])
+df900 = pd.read_csv('timepositions900.csv', names=['t', 'x', 'y', 'z','eventid'])
+df1000 = pd.read_csv('timepositions1000.csv', names=['t', 'x', 'y', 'z','eventid'])
 
 dflist = [df100, df200, df300, df400, df500, df600, df700, df800, df900, df1000]
 

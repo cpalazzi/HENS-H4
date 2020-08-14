@@ -5,7 +5,7 @@ Created on Mon May 25 15:41:46 2020
 
 @author: carlopalazzi
 """
-
+# %%
 import pandas as pd
 import numpy as np
 from statsmodels.graphics.gofplots import qqplot
@@ -29,24 +29,24 @@ import pingouin as pg
 #            a1*np.exp(((x-mu1)**2)/sigma1) + a2*np.exp(((x-mu2)**2)/sigma2) + \
 #            a3*np.exp(((x-mu3)**2)/sigma3) + b
 
-df100 = pd.read_csv('timepositions100.csv', names=['t', 'x', 'y', 'z'])
+df100 = pd.read_csv('timepositions100.csv', names=['t', 'x', 'y', 'z','eventid'])
 df100 = df100/1000
-df200 = pd.read_csv('timepositions200.csv', names=['t', 'x', 'y', 'z'])
-df300 = pd.read_csv('timepositions300.csv', names=['t', 'x', 'y', 'z'])
-df400 = pd.read_csv('timepositions400.csv', names=['t', 'x', 'y', 'z'])
-df500 = pd.read_csv('timepositions500.csv', names=['t', 'x', 'y', 'z'])
-df600 = pd.read_csv('timepositions600.csv', names=['t', 'x', 'y', 'z'])
-df700 = pd.read_csv('timepositions700.csv', names=['t', 'x', 'y', 'z'])
-df800 = pd.read_csv('timepositions800.csv', names=['t', 'x', 'y', 'z'])
-df900 = pd.read_csv('timepositions900.csv', names=['t', 'x', 'y', 'z'])
-df1000 = pd.read_csv('timepositions1000.csv', names=['t', 'x', 'y', 'z'])
+df200 = pd.read_csv('timepositions200.csv', names=['t', 'x', 'y', 'z','eventid'])
+df300 = pd.read_csv('timepositions300.csv', names=['t', 'x', 'y', 'z','eventid'])
+df400 = pd.read_csv('timepositions400.csv', names=['t', 'x', 'y', 'z','eventid'])
+df500 = pd.read_csv('timepositions500.csv', names=['t', 'x', 'y', 'z','eventid'])
+df600 = pd.read_csv('timepositions600.csv', names=['t', 'x', 'y', 'z','eventid'])
+df700 = pd.read_csv('timepositions700.csv', names=['t', 'x', 'y', 'z','eventid'])
+df800 = pd.read_csv('timepositions800.csv', names=['t', 'x', 'y', 'z','eventid'])
+df900 = pd.read_csv('timepositions900.csv', names=['t', 'x', 'y', 'z','eventid'])
+df1000 = pd.read_csv('timepositions1000.csv', names=['t', 'x', 'y', 'z','eventid'])
 
 dflist = [df100, df200, df300, df400, df500, df600, df700, df800, df900, df1000]
 
 # Convert to metres and microseconds
 for i in dflist:
     i = i.divide(1000)
-
+# %%
 ## initial guesses for parameters
 #p0 = 1, 0.2, df100['x'].mean(), df100['x'].var(), 1, \
 #    df100['y'].mean(), df100['y'].var(), 1, \
@@ -76,7 +76,7 @@ mean1000 = df1000.mean()
 print(cov1000)
 print("\n")
 print(mean1000)
-
+# %%
 # q-q plot
 qqplot(df100['t'], line='s', dist=stats.laplace)
 pyplot.show()
@@ -85,7 +85,7 @@ plt.savefig('images/xlaplaceqq.png', dpi=800, bbox_inches='tight')
 pyplot.show()
 qqplot(df100['z'], line='s', dist=stats.laplace)
 pyplot.show()
-
+# %%
 # multivariate normality test
 normal, p = pg.multivariate_normality(df100[['x','y','z']], alpha=.05)
 print(normal, round(p, 3))
@@ -95,9 +95,9 @@ if p > alpha:
 	print('Sample looks Gaussian (fail to reject H0)')
 else:
 	print('Sample does not look Gaussian (reject H0)')
-   
+# %%
 # univariate normality test
-stat, p1 = stats.normaltest(df100['x'])
+stat, p1 = stats.normaltest(abs(df100['t']))
 print('Statistics=%.3f, p1=%.3f' % (stat, p1))
 # interpret
 alpha = 0.05
@@ -106,3 +106,4 @@ if p1 > alpha:
 else:
 	print('Sample does not look Gaussian (reject H0)')
 
+# %%

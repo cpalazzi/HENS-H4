@@ -5,43 +5,47 @@ Created on Fri May 29 09:13:25 2020
 
 @author: carlopalazzi
 """
-
+# %%
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 #from matplotlib import rc
 #rc('text', usetex=False)
 from scipy import optimize
-
-df10 = pd.read_csv('timepositions10.csv', names=['t', 'x', 'y', 'z'])
-df20 = pd.read_csv('timepositions20.csv', names=['t', 'x', 'y', 'z'])
-df30 = pd.read_csv('timepositions30.csv', names=['t', 'x', 'y', 'z'])
-df40 = pd.read_csv('timepositions40.csv', names=['t', 'x', 'y', 'z'])
-df50 = pd.read_csv('timepositions50.csv', names=['t', 'x', 'y', 'z'])
-df60 = pd.read_csv('timepositions60.csv', names=['t', 'x', 'y', 'z'])
-df70 = pd.read_csv('timepositions70.csv', names=['t', 'x', 'y', 'z'])
-df80 = pd.read_csv('timepositions80.csv', names=['t', 'x', 'y', 'z'])
-df90 = pd.read_csv('timepositions90.csv', names=['t', 'x', 'y', 'z'])
-df100 = pd.read_csv('timepositions100.csv', names=['t', 'x', 'y', 'z'])
-df200 = pd.read_csv('timepositions200.csv', names=['t', 'x', 'y', 'z'])
-df300 = pd.read_csv('timepositions300.csv', names=['t', 'x', 'y', 'z'])
-df400 = pd.read_csv('timepositions400.csv', names=['t', 'x', 'y', 'z'])
-df500 = pd.read_csv('timepositions500.csv', names=['t', 'x', 'y', 'z'])
-df600 = pd.read_csv('timepositions600.csv', names=['t', 'x', 'y', 'z'])
-df700 = pd.read_csv('timepositions700.csv', names=['t', 'x', 'y', 'z'])
-df800 = pd.read_csv('timepositions800.csv', names=['t', 'x', 'y', 'z'])
-df900 = pd.read_csv('timepositions900.csv', names=['t', 'x', 'y', 'z'])
-df1000 = pd.read_csv('timepositions1000.csv', names=['t', 'x', 'y', 'z'])
-df2000 = pd.read_csv('timepositions2000.csv', names=['t', 'x', 'y', 'z'])
+# %%
+df10 = pd.read_csv('timepositions10.csv', names=['t', 'x', 'y', 'z','eventid'])
+df20 = pd.read_csv('timepositions20.csv', names=['t', 'x', 'y', 'z','eventid'])
+df30 = pd.read_csv('timepositions30.csv', names=['t', 'x', 'y', 'z','eventid'])
+df40 = pd.read_csv('timepositions40.csv', names=['t', 'x', 'y', 'z','eventid'])
+df50 = pd.read_csv('timepositions50.csv', names=['t', 'x', 'y', 'z','eventid'])
+df60 = pd.read_csv('timepositions60.csv', names=['t', 'x', 'y', 'z','eventid'])
+df70 = pd.read_csv('timepositions70.csv', names=['t', 'x', 'y', 'z','eventid'])
+df80 = pd.read_csv('timepositions80.csv', names=['t', 'x', 'y', 'z','eventid'])
+df90 = pd.read_csv('timepositions90.csv', names=['t', 'x', 'y', 'z','eventid'])
+df100 = pd.read_csv('timepositions100.csv', names=['t', 'x', 'y', 'z','eventid'])
+df200 = pd.read_csv('timepositions200.csv', names=['t', 'x', 'y', 'z','eventid'])
+df300 = pd.read_csv('timepositions300.csv', names=['t', 'x', 'y', 'z','eventid'])
+df400 = pd.read_csv('timepositions400.csv', names=['t', 'x', 'y', 'z','eventid'])
+df500 = pd.read_csv('timepositions500.csv', names=['t', 'x', 'y', 'z','eventid'])
+df600 = pd.read_csv('timepositions600.csv', names=['t', 'x', 'y', 'z','eventid'])
+df700 = pd.read_csv('timepositions700.csv', names=['t', 'x', 'y', 'z','eventid'])
+df800 = pd.read_csv('timepositions800.csv', names=['t', 'x', 'y', 'z','eventid'])
+df900 = pd.read_csv('timepositions900.csv', names=['t', 'x', 'y', 'z','eventid'])
+df1000 = pd.read_csv('timepositions1000.csv', names=['t', 'x', 'y', 'z','eventid'])
+df2000 = pd.read_csv('timepositions2000.csv', names=['t', 'x', 'y', 'z','eventid'])
 
 dflist = [df10, df20, df30, df40, df50, df60, df70, df80, df90\
           , df100, df200, df300, df400, df500, df600, df700, df800, df900, df1000\
           , df2000]
 
+# Create column which counts number of nCapture in each event
+for df in dflist:
+    df['counteid'] = df.groupby('eventid')['eventid'].transform('count')
+# %%
 # Convert units to metres and microseconds
 for df in dflist: 
-    df[df.columns] = df[df.columns]/1000
-
+    df[['t','x','y','z']] = df[['t','x','y','z']]/1000
+# %%
 # Create xdist columns
 for i in dflist:
     i['xdist'] = np.sqrt(i['x']**2)
@@ -175,3 +179,123 @@ fig.text(0.01, 0.5, 'Count (100 bins)', ha='center', va='center', rotation='vert
 
 plt.savefig('images/nCapturexdisthisto.png', dpi=800, bbox_inches='tight')
 plt.show()
+
+# %%
+df100.head().to_csv('df100head.csv',index=False)
+len(df100)
+
+# %%
+plt.hist(df100['counteid'],bins=np.arange(7)-0.5)
+plt.xlabel('Neutron Capture Count in Event')
+plt.ylabel('Number of Events')
+plt.xlim([0, 5])
+plt.savefig('images/ncount100hist.png', dpi=800, bbox_inches='tight')
+
+# %%
+df100['x'].hist(bins=100)
+plt.xlabel('x (m)', fontsize=20)
+plt.ylabel('Count', fontsize=20)
+plt.savefig('images/x100hist.png', dpi=800, bbox_inches='tight')
+
+# %%
+df100['y'].hist(bins=100)
+plt.xlabel('y (m)', fontsize=20)
+plt.ylabel('Count', fontsize=20)
+plt.savefig('images/y100hist.png', dpi=800, bbox_inches='tight')
+
+# %%
+df100['z'].hist(bins=100)
+plt.xlabel('z (m)', fontsize=20)
+plt.ylabel('Count', fontsize=20)
+plt.savefig('images/z100hist.png', dpi=800, bbox_inches='tight')
+
+# %%
+np.sqrt(df100['x']**2+df100['y']**2).hist(bins=100)
+plt.xlabel('rho (m)')
+plt.ylabel('Count')
+plt.savefig('images/rho100hist.png', dpi=800, bbox_inches='tight')
+
+# %%
+plt.scatter(np.sqrt(df100['x']**2+df100['y']**2), df100['z'], s=0.2)
+plt.xlabel('rho (m)')
+plt.ylabel('z (m)')
+plt.gca().set_aspect('equal', adjustable='box')
+plt.savefig('images/rhoz100scatter.png', dpi=800, bbox_inches='tight')
+
+
+# %%
+plt.scatter(df100['x'],df100['y'], s=0.2)
+plt.xlabel('x (m)')
+plt.ylabel('y (m)')
+plt.gca().set_aspect('equal', adjustable='box')
+plt.savefig('images/xy100scatter.png', dpi=800, bbox_inches='tight')
+
+
+# %%
+plt.scatter(np.sqrt(df100['x']**2+df100['y']**2+df100['z']**2),df100['t'], s=0.2)
+plt.xlabel('r (m)',fontsize=15)
+plt.ylabel('t (m)',fontsize=15)
+plt.savefig('images/rt100scatter.png', dpi=800, bbox_inches='tight')
+
+# %%
+plt.scatter(np.sqrt(df100['x']**2+df100['y']**2+df100['z']**2),df100['counteid'], s=0.2)
+plt.xlabel('r (m)')
+plt.ylabel('Number of neutron captures in event')
+plt.savefig('images/rcounteid100scatter.png', dpi=800, bbox_inches='tight')
+
+# %%
+# %%
+plt.scatter(df100['z'],df100['counteid'], s=0.2)
+plt.xlabel('z (m)')
+plt.ylabel('Number of neutron captures in event')
+plt.savefig('images/zcounteid100scatter.png', dpi=800, bbox_inches='tight')
+
+# %%
+plt.scatter(df100['t'],df100['counteid'], s=0.2)
+plt.xlabel('t (microsec)')
+plt.ylabel('Number of neutron captures in event')
+plt.savefig('images/tcounteid100scatter.png', dpi=800, bbox_inches='tight')
+
+# %%
+(np.log(np.sqrt(df100['x']**2+df100['y']**2+df100['z']**2)*1000000/df100['t'])).hist(bins=100)
+plt.xlabel('ln(v (m/s))',fontsize=15)
+plt.ylabel('Count',fontsize=15)
+plt.savefig('images/v100hist.png', dpi=800, bbox_inches='tight')
+
+# %%
+print((np.sqrt(df100['x']**2+df100['y']**2+df100['z']**2)/df100['t']).mean())
+# %%
+np.exp(16)
+
+# %%
+print('Mean rho = ', np.sqrt(df100['x']**2+df100['y']**2).mean())
+print('Variance rho = ', np.sqrt(df100['x']**2+df100['y']**2).var())
+
+df100['z']
+
+# %%
+# %%
+plt.scatter(np.sqrt(df1000['x']**2+df1000['y']**2), df1000['z'], s=0.2)
+plt.xlabel('rho (m)')
+plt.ylabel('z (m)')
+plt.gca().set_aspect('equal', adjustable='box')
+plt.savefig('images/rhoz1000scatter.png', dpi=800, bbox_inches='tight')
+
+# %%
+plt.scatter(np.sqrt(df100['x']**2+df100['z']**2), df100['counteid'], s=0.2)
+plt.xlabel('rho (m)')
+plt.ylabel('Count EID (m)')
+plt.gca().set_aspect('equal', adjustable='box')
+plt.savefig('images/rhocounteid100scatter.png', dpi=800, bbox_inches='tight')
+
+
+
+# %%
+df100['rho']=np.sqrt(df100['x']**2+df100['y']**2)
+pd.plotting.scatter_matrix(df100[['t','rho','z','counteid']], diagonal="kde")
+plt.tight_layout()
+plt.savefig('images/100scattermatrix.png', dpi=800, bbox_inches='tight')
+plt.show()
+
+
+# %%

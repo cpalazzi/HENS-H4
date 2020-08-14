@@ -229,7 +229,7 @@ print('Execution time: ', total)
 dfresults.to_csv(f'dfmvuv_e{energy_test}_n{numn_test}_bw0.10.csv')
 
 # %%
-# Scatter plot data 
+# Scatter plot sim 
 # Calculate the point density
 x = dfresults['rho']
 y = dfresults['z']

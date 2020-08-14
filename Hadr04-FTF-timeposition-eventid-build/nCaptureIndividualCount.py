@@ -361,6 +361,11 @@ ax.scatter(dfenergyncap['energy'], dfenergyncap['ncapcount'], dfenergyncap['even
 ax.set_xlabel('Energy (MeV)')
 ax.set_ylabel('Number of nCapture in event')
 ax.set_zlabel('Number of events')
+plt.gcf().subplots_adjust(right=1.5)
+plt.gcf().subplots_adjust(bottom=-0.5)
+plt.savefig('images/ncapcount3D.png', dpi=800, bbox_inches='tight')
+plt.show()
+
 
 # %%
 # LinearND interpolation
